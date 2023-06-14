@@ -1,9 +1,9 @@
 package main
 
-import {
+import (
 	"fmt"
 	"net/http"
-}
+)
 
 func main() {
 
@@ -11,8 +11,8 @@ func main() {
 	fs := http.FileServer(http.Dir("./static"))
 
 	//register the file server hadler for the "/static/" route
-	http.Handle("/static/"), http.StripPrefix("/static/", fs)
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	fmt.Println("Server listening on port 8080...")
-	http.ListenAndServe("8080", nil)
+	http.ListenAndServe(":8080", nil)
 }
