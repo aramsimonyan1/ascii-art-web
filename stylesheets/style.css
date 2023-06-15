@@ -1,0 +1,21 @@
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.flex-container {
+    display: flex;
+    background-color: bisque;
+    padding: 15px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+
+}
+
+.item {
+    margin: 10px;
+    align-self: center;
+}
