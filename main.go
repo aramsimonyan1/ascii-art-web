@@ -73,36 +73,45 @@ func generateASCIIArt(text, banner string) (string, error) {
 		fileLines = append(fileLines, fileScanner.Text())
 	}
 
-	lines := strings.Split(text, "\n") // Split input text by new lines
-
-	var generatedArt strings.Builder
-
-	for _, line := range lines {
-		line = strings.ReplaceAll(line, "\\n", "n3wL1ne")
-		words := strings.Split(line, "\n")
-
-		for _, word := range words {
-			if len(word) == 0 {
-				generatedArt.WriteString("\n")
-				continue
-			}
-
-			runes := []rune(word)
-			for k := 1; k < 9; k++ {
-				for _, ch := range runes {
-					m := rune(k)
-					// reduce each character value by 32 in ascii table,
-					// multiply by the 9 rows each character uses in standard.txt,
-					// add the row number
-					asciiFetch := ((ch - 32) * 9) + m
-					if int(asciiFetch) >= 0 && int(asciiFetch) < len(fileLines) {
-						generatedArt.WriteString(fileLines[int(asciiFetch)])
-					}
-				}
-				generatedArt.WriteString("\n")
-			}
+	// looking for "\n" and turn it into "n3wL1ne" so string.Split can find it
+	preLine := []rune(text)
+	for m := 0; m < len(preLine); m++ {
+		arrayMiddle := "n3wL!Ne"
+		if preLine[m] == 92 && preLine[m+1] == 'n' {
+			array1 := preLine[0:m]
+			array2 := preLine[m+2:]
+			s1 := string([]rune(array1))
+			s2 := string([]rune(array2))
+			text = s1 + arrayMiddle + s2
+			preLine = ([]rune(text))
 		}
 	}
 
+	// split the text into lines if required
+	lines := strings.Split(string(preLine), "n3wL!Ne")
+
+	var generatedArt strings.Builder
+
+	for _, word := range lines {
+		if len(word) == 0 {
+			generatedArt.WriteString("\n")
+			continue
+		}
+
+		runes := []rune(word)
+		for k := 1; k < 9; k++ {
+			for _, ch := range runes {
+				m := rune(k)
+				// reduce each character value by 32 in ascii table,
+				// multiply by the 9 rows each character uses in standard.txt,
+				// add the row number
+				asciiFetch := ((ch - 32) * 9) + m
+				if int(asciiFetch) >= 0 && int(asciiFetch) < len(fileLines) {
+					generatedArt.WriteString(fileLines[int(asciiFetch)])
+				}
+			}
+			generatedArt.WriteString("\n")
+		}
+	}
 	return generatedArt.String(), nil
 }
