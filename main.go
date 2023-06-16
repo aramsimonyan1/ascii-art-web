@@ -79,7 +79,7 @@ func generateASCIIArt(text, banner string) (string, error) {
 
 	for _, line := range lines {
 		line = strings.ReplaceAll(line, "\\n", "n3wL1ne")
-		words := strings.Split(line, " ")
+		words := strings.Split(line, "\n")
 
 		for _, word := range words {
 			if len(word) == 0 {
@@ -91,8 +91,11 @@ func generateASCIIArt(text, banner string) (string, error) {
 			for k := 1; k < 9; k++ {
 				for _, ch := range runes {
 					m := rune(k)
+					// reduce each character value by 32 in ascii table,
+					// multiply by the 9 rows each character uses in standard.txt,
+					// add the row number
 					asciiFetch := ((ch - 32) * 9) + m
-					if asciiFetch >= 0 && int(asciiFetch) < len(fileLines) {
+					if int(asciiFetch) >= 0 && int(asciiFetch) < len(fileLines) {
 						generatedArt.WriteString(fileLines[int(asciiFetch)])
 					}
 				}
