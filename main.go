@@ -9,6 +9,11 @@ import (
 )
 
 func main() {
+	// Create a file server handler for serving static files
+	fs := http.FileServer(http.Dir("templates"))
+	// Register the file server handler for the "/static/" route
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/ascii-art", asciiArtHandler)
 
@@ -18,13 +23,20 @@ func main() {
 	}
 }
 
+// The homeHandler func handles the GET request for the main page, where the user can input their text and select the banner.
+// if the template files (index.html or result.html) are not found, the handlers will return a "Template not found" error response
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		tmpl := template.Must(template.ParseFiles("index.html"))
+		tmpl, err := template.ParseFiles("templates/index.html")
+		if err != nil {
+			http.Error(w, "Template not found", http.StatusNotFound)
+			return
+		}
 		tmpl.Execute(w, nil)
 	}
 }
 
+// The asciiArtHandler func handles the POST request when the user submits the form, generates the ASCII art, and renders the result in the result.html template.
 func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		err := r.ParseForm()
@@ -38,15 +50,31 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 		art, err := generateASCIIArt(inputText, banner)
 		if err != nil {
+			// when the ASCII art generation encounters an unhandled errors
 			http.Error(w, "Failed to generate ASCII art", http.StatusInternalServerError)
 			return
 		}
 
-		tmpl := template.Must(template.ParseFiles("result.html"))
+		// validation check for the input before generating the ASCII art (clicking the button 'ASCII art' without any input)
+		if art == "" {
+			http.Error(w, "Input text is required", http.StatusBadRequest)
+			return
+		}
+
+		// tmpl := template.Must(template.ParseFiles("templates/result.html"))
+		tmpl, err := template.ParseFiles("templates/result.html")
+		if err != nil {
+			http.Error(w, "Template not found", http.StatusNotFound)
+			return
+		}
 		tmpl.Execute(w, art)
+		// If a request method other than POST is received, it returns a "Method Not Allowed" error with the appropriate status code (http.StatusMethodNotAllowed).
+	} else {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 	}
 }
 
+// The generateASCIIArt handles the conversion of user input into ASCII art using the selected banner.
 func generateASCIIArt(text, banner string) (string, error) {
 	var filename string
 	switch banner {
