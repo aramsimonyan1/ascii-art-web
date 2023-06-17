@@ -45,15 +45,15 @@ Ascii-art-web consists in creating and running a server, in which it will be pos
     Only the standard go packages are allowed
 
 ## Usage
-Here's an example: http://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20
+    Here's an example: http://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20
 
 ## Your group
-You need at least to be 2 members to start the project, but you can be up to 3. Minimum audit ratio of 0.5 is required for every member of the group.
+    You need at least to be 2 members to start the project, but you can be up to 3. Minimum audit ratio of 0.5 is required for every member of the group.
 
 
 
 # Authors
-Aram Simonyan
+    Aram Simonyan
 
 
 
