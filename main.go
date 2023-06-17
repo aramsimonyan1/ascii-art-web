@@ -106,6 +106,7 @@ func generateASCIIArt(text, banner string) (string, error) {
 		fileLines = append(fileLines, fileScanner.Text()) // in each iteration, it reads the next line from the file using fileScanner.Scan() and adds the line to the fileLines slice using fileScanner.Text()
 	}
 
+	/*  This piece of code wil do multiple lines if input tex contains '\n'
 	// looking for "\n" and turn it into "n3wL1ne" so string.Split can find it
 	preLine := []rune(text)
 	for m := 0; m < len(preLine); m++ {
@@ -122,6 +123,10 @@ func generateASCIIArt(text, banner string) (string, error) {
 
 	// split the text into lines if required
 	lines := strings.Split(string(preLine), "n3wL!Ne")
+	*/
+
+	// This line of code will do multiple lines when 'Enter' button is used on keybord for separate lines in input text
+	lines := strings.Split(text, "\n")
 
 	var generatedArt strings.Builder
 
