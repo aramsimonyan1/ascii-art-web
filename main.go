@@ -48,16 +48,16 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		inputText := r.Form.Get("inputText")
 		banner := r.Form.Get("banners")
 
+		// validation check for the input before generating the ASCII art (clicking the button 'ASCII art' without any input)
+		if inputText == "" {
+			http.Error(w, "Input text is required", http.StatusBadRequest)
+			return
+		}
+
 		art, err := generateASCIIArt(inputText, banner)
 		if err != nil {
 			// when the ASCII art generation encounters an unhandled errors
 			http.Error(w, "Failed to generate ASCII art", http.StatusInternalServerError)
-			return
-		}
-
-		// validation check for the input before generating the ASCII art (clicking the button 'ASCII art' without any input)
-		if art == "" {
-			http.Error(w, "Input text is required", http.StatusBadRequest)
 			return
 		}
 
@@ -77,7 +77,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 // The generateASCIIArt handles the conversion of user input into ASCII art using the selected banner.
 func generateASCIIArt(text, banner string) (string, error) {
 	var filename string
-	switch banner {
+	switch banner { // switch statement that checks the value/name of the banner variable
 	case "shadow":
 		filename = "shadow.txt"
 	case "standard":
@@ -88,17 +88,22 @@ func generateASCIIArt(text, banner string) (string, error) {
 		return "", nil
 	}
 
+	// Attempts to open the file specified by the filename variable. If successful, it returns a file descriptor (file) and a nil error.
 	file, err := os.Open(filename)
 	if err != nil {
 		return "", err
 	}
-	defer file.Close()
+	defer file.Close() // schedules the Close() function of the file to be called when the generateASCIIArt completes.
 
-	fileScanner := bufio.NewScanner(file)
-	fileScanner.Split(bufio.ScanLines)
-	var fileLines []string
-	for fileScanner.Scan() {
-		fileLines = append(fileLines, fileScanner.Text())
+	/* This code segment reads the content of a specific file (based on the banner value)
+	line by line and stores each line in the fileLines slice. It sets up the necessary
+	file handling and prepares the content for later use in generating the ASCII art.*/
+
+	fileScanner := bufio.NewScanner(file) // creates a scanner (fileScanner) to read the contents of the opened file.
+	fileScanner.Split(bufio.ScanLines)    // configures the scanner to split the file content into lines based on newline characters ('\n').
+	var fileLines []string                // declares an empty slice (fileLines) to store the lines read from the file.
+	for fileScanner.Scan() {              // enters a loop that iterates until the scanner reaches the end of the file.
+		fileLines = append(fileLines, fileScanner.Text()) // in each iteration, it reads the next line from the file using fileScanner.Scan() and adds the line to the fileLines slice using fileScanner.Text()
 	}
 
 	// looking for "\n" and turn it into "n3wL1ne" so string.Split can find it
@@ -111,7 +116,7 @@ func generateASCIIArt(text, banner string) (string, error) {
 			s1 := string([]rune(array1))
 			s2 := string([]rune(array2))
 			text = s1 + arrayMiddle + s2
-			preLine = ([]rune(text))
+			preLine = []rune(text)
 		}
 	}
 
