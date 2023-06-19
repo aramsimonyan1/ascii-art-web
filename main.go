@@ -14,11 +14,17 @@ func main() {
 	// Register the file server handler for the "/static/" route
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
+	// This line registers the homeHandler function as the handler for the root URL ("/") of the server. When a request is made to the root URL, the homeHandler function will be executed.
 	http.HandleFunc("/", homeHandler)
+
+	// This line registers the asciiArtHandler function as the handler for the "/ascii-art" URL of the server. When a request is made to the "/ascii-art" URL, the asciiArtHandler function will be executed.
 	http.HandleFunc("/ascii-art", asciiArtHandler)
 
+	/* This line starts the HTTP server and listens for incoming requests on port 8080. The the 1st argument is the address and
+	port to listen on (in this case, ":8080" means to listen on all available network interfaces on port 8080), and the 2nd argument is
+	the handler to use for incoming requests (in this case, nil means to use the default handler, which is DefaultServeMux). */
 	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
+	if err != nil { // Checks if there was an error starting the server. If an error occurs, such as if the port is already in use, it will cause the program to panic, meaning it will immediately stop execution and print the error message.
 		panic(err)
 	}
 }
@@ -106,7 +112,7 @@ func generateASCIIArt(text, banner string) (string, error) {
 		fileLines = append(fileLines, fileScanner.Text()) // in each iteration, it reads the next line from the file using fileScanner.Scan() and adds the line to the fileLines slice using fileScanner.Text()
 	}
 
-	/*  This piece of code wil do multiple lines if input tex contains '\n'
+	/*  This piece of code wil do multiple lines if input text contains '\n'
 	// looking for "\n" and turn it into "n3wL1ne" so string.Split can find it
 	preLine := []rune(text)
 	for m := 0; m < len(preLine); m++ {
