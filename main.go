@@ -14,16 +14,13 @@ func main() {
 
 	http.HandleFunc("/", homeHandler)
 
-
 	http.HandleFunc("/ascii-art", asciiArtHandler)
 
-
 	err := http.ListenAndServe(":8080", nil)
-	if err != nil { 
+	if err != nil {
 		panic(err)
 	}
 }
-
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
@@ -35,7 +32,6 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, nil)
 	}
 }
-
 
 func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
@@ -50,6 +46,12 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 		if inputText == "" {
 			http.Error(w, "Input text is required", http.StatusBadRequest)
+			return
+		}
+
+		// new
+		if inputText == "£" {
+			http.Error(w, "Bad request", http.StatusBadRequest)
 			return
 		}
 
@@ -72,7 +74,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 func generateASCIIArt(text, banner string) (string, error) {
 	var filename string
-	switch banner { 
+	switch banner {
 	case "shadow":
 		filename = "shadow.txt"
 	case "standard":
@@ -87,14 +89,13 @@ func generateASCIIArt(text, banner string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defer file.Close() 
+	defer file.Close()
 
-
-	fileScanner := bufio.NewScanner(file) 
-	fileScanner.Split(bufio.ScanLines)    
-	var fileLines []string                
-	for fileScanner.Scan() {              
-		fileLines = append(fileLines, fileScanner.Text()) 
+	fileScanner := bufio.NewScanner(file)
+	fileScanner.Split(bufio.ScanLines)
+	var fileLines []string
+	for fileScanner.Scan() {
+		fileLines = append(fileLines, fileScanner.Text())
 	}
 
 	lines := strings.Split(text, "\n")
