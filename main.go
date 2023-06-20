@@ -13,8 +13,11 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", homeHandler)
-
 	http.HandleFunc("/ascii-art", asciiArtHandler)
+
+	// Register a custom 404 handler for unknown URLs
+	http.HandleFunc("/404", notFoundHandler)
+	http.HandleFunc("/favicon.ico", notFoundHandler)
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
@@ -23,6 +26,11 @@ func main() {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		notFoundHandler(w, r)
+		return
+	}
+
 	if r.Method == "GET" {
 		tmpl, err := template.ParseFiles("templates/index.html")
 		if err != nil {
@@ -30,10 +38,17 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		tmpl.Execute(w, nil)
+	} else {
+		notFoundHandler(w, r)
 	}
 }
 
 func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/ascii-art" {
+		notFoundHandler(w, r)
+		return
+	}
+
 	if r.Method == "POST" {
 		err := r.ParseForm()
 		if err != nil {
@@ -68,8 +83,12 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		tmpl.Execute(w, art)
 	} else {
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		notFoundHandler(w, r)
 	}
+}
+
+func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "Page not found", http.StatusNotFound)
 }
 
 func generateASCIIArt(text, banner string) (string, error) {
