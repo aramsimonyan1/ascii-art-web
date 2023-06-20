@@ -8,7 +8,6 @@ import (
 	"testing"
 )
 
-
 func TestNotFoundHandler(t *testing.T) {
 	req, err := http.NewRequest("GET", "/non-existent", nil)
 	if err != nil {
@@ -55,8 +54,7 @@ func TestBadRequestHandler(t *testing.T) {
 	}
 }
 
-
-func TestInternalServerErrorHandler(t *testing.T) {.
+func TestInternalServerErrorHandler(t *testing.T) {
 	rr := httptest.NewRecorder()
 
 	http.Error(rr, "Internal Server Error", http.StatusInternalServerError)
