@@ -65,8 +65,8 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// new
-		if inputText == "£" {
-			http.Error(w, "Bad request", http.StatusBadRequest)
+		if !isASCII(inputText) {
+			http.Error(w, "Invalid input text: Non-ASCII characters not allowed", http.StatusBadRequest)
 			return
 		}
 
@@ -85,6 +85,15 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		notFoundHandler(w, r)
 	}
+}
+
+func isASCII(s string) bool {
+	for _, r := range s {
+		if r > 127 {
+			return false
+		}
+	}
+	return true
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
@@ -131,7 +140,6 @@ func generateASCIIArt(text, banner string) (string, error) {
 		for k := 1; k < 9; k++ {
 			for _, ch := range runes {
 				m := rune(k)
-
 				asciiFetch := ((ch - 32) * 9) + m
 				if int(asciiFetch) >= 0 && int(asciiFetch) < len(fileLines) {
 					generatedArt.WriteString(fileLines[int(asciiFetch)])
