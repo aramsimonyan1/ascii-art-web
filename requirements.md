@@ -40,12 +40,12 @@ The main page must have:
     Implementation details: algorithm
 
 ## Instructions
-    HTTP server must be written in Go.
-    HTML templates must be in the project root directory templates.
-    The code must respect the good practices.
+HTTP server must be written in Go.
+HTML templates must be in the project root directory templates.
+The code must respect the good practices.
 
 ## Allowed packages
-    Only the standard go packages are allowed
+Only the standard go packages are allowed
 
 ## Usage
-    Here's an example: http://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20
+Here's an example: http://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20
