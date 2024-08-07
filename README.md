@@ -1,7 +1,7 @@
 # ascii-art-web
 A web application in written in Go that converts text inputs into ASCII art using predefined patterns from external files. Users can customize the output style by selecting from multiple ASCII art templates/fonts. This functionality is accessible through a user-friendly web interface, allowing for dynamic and engaging text-to-art transformations.
 
-## Usage: how to run.
+## How to run.
     1. clone the repository: https://github.com/aramsimonyan1/ascii-art-web.git
     2. Start the application: go run main.go
     3. Open your web browser and navigate to http://localhost:8080 to access the application.
