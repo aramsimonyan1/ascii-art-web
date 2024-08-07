@@ -27,25 +27,30 @@ The main page must have:
     radio buttons, select object or anything else to switch between banners
     button, which sends a POST request to '/ascii-art' and outputs the result on the page.
 
+
 ## HTTP status code
 ### Your endpoints must return appropriate HTTP status codes.
     OK (200), if everything went without errors.
     Not Found, if nothing is found, for example templates or banners.
     Bad Request, for incorrect requests.
     Internal Server Error, for unhandled errors.
+
 ### In the root project directory create a README.MD file with the following sections and contents:
     Description
     Authors
     Usage: how to run
     Implementation details: algorithm
 
+
 ## Instructions
 HTTP server must be written in Go.
 HTML templates must be in the project root directory templates.
 The code must respect the good practices.
 
+
 ## Allowed packages
 Only the standard go packages are allowed
+
 
 ## Usage
 Here's an example: http://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20
